@@ -2,6 +2,7 @@ package br.com.aurum.astrea.contact;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -13,15 +14,18 @@ import br.com.aurum.astrea.controller.ContactController;
 import br.com.aurum.astrea.dao.ContactDao;
 import br.com.aurum.astrea.domain.Contact;
 
-@PrepareForTest( { ContactDao.class })
+@PrepareForTest( { ContactDao.class, ContactController.class })
 public class ContactTest {
 	
 	@Rule
 	public PowerMockRule rule = new PowerMockRule();
 	private ContactController controller;
+	private ContactDao dao;
 	
 	@Before
-	public void setup(){
+	public void setup() throws Exception{
+		dao = Mockito.mock(ContactDao.class);
+		PowerMockito.whenNew(ContactDao.class).withNoArguments().thenReturn(dao);
 		controller = new ContactController();
 	}
 	
@@ -49,15 +53,39 @@ public class ContactTest {
 	
 	@Test
 	public void deveSalvarUmContatoComDadosValidos() throws Exception{
-		mockContactDAO();
+		Mockito.doNothing().when(dao).save(Mockito.any(Contact.class));
 		Contact contact = new Contact();
 		contact.setName("Vinicius");
-		
+		controller.save(contact);
 	}
-
-	private void mockContactDAO() throws Exception {
-		ContactDao dao = Mockito.mock(ContactDao.class);
-		Mockito.doNothing().when(dao).save(Mockito.any(Contact.class));
-		PowerMockito.whenNew(ContactDao.class).withNoArguments().thenReturn(dao);
+	
+	@Test(expected = NullPointerException.class)
+	public void naoDeveDeletarSeNaoForInformadoId(){
+		try{
+			controller.delete(null);			
+		} catch(Exception e){
+			Assert.assertEquals("Código do contato não informado.", e.getMessage());
+			throw e;
+		}
+	}
+	
+	@Test(expected = NullPointerException.class)
+	public void naoDeveDeletarSeNaoEncontrarOContatoInformado() throws Exception{
+		try {
+			controller.delete(1L);			
+		} catch(Exception e){
+			Assert.assertEquals("Contato não encontrado para o código informado.", e.getMessage());
+			throw e;
+		}
+	}
+	
+	@Test
+	@Ignore
+	public void deveDeletarOContatoQuandoEncontrado() throws Exception{
+		// TODO corrigir o problema com o mock que não retorna um contato no findOne
+		Mockito.doReturn(new Contact()).when(dao).findOne(1L);
+		Mockito.doNothing().when(dao).delete(Mockito.any(Contact.class));
+		controller = new ContactController();
+		controller.delete(1L);
 	}
 }

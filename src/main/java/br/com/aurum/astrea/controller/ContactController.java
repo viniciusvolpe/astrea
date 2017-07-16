@@ -21,4 +21,11 @@ public class ContactController {
 	public List<Contact> findAll() {
 		return DAO.list();
 	}
+
+	public void delete(Long contactId) {
+		Validate.notNull(contactId, "Código do contato não informado.");
+		Contact contact = DAO.findOne(contactId);
+		Validate.notNull(contact, "Contato não encontrado para o código informado.");
+		DAO.delete(contact);
+	}
 }
