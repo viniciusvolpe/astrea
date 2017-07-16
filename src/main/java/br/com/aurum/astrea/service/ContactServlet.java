@@ -1,6 +1,7 @@
 package br.com.aurum.astrea.service;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -15,19 +16,19 @@ import br.com.aurum.astrea.domain.Contact;
 public class ContactServlet extends HttpServlet {
 	
 	private static final ContactController CONTROLLER = new ContactController();
+	private static final Gson GSON = new Gson();
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-		Contact contact = new Gson().fromJson(req.getReader(), Contact.class);
+		Contact contact = GSON.fromJson(req.getReader(), Contact.class);
 		CONTROLLER.save(contact);
 	}
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-		
-		// TODO: Implementar um método que irá listar todas as entidades do tipo 'Contato' e devolver para o client essa listagem.
+		List<Contact> contacts = CONTROLLER.findAll();
+		resp.getWriter().write(GSON.toJson(contacts));
 	}
-	
 	@Override
 	protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		

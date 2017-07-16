@@ -1,6 +1,5 @@
 package br.com.aurum.astrea.dao;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.googlecode.objectify.ObjectifyService;
@@ -18,8 +17,7 @@ public class ContactDao {
 	}
 	
 	public List<Contact> list() {
-		// TODO: É preciso pesquisar como se usa o Objectify para listar as entidades de contato.
-		return new ArrayList<>();
+		return ObjectifyService.ofy().load().type(Contact.class).list();
 	}
 	
 	public void delete(Long contactId) {

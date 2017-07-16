@@ -1,5 +1,6 @@
 package br.com.aurum.astrea.controller;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.apache.commons.lang3.Validate;
@@ -15,5 +16,9 @@ public class ContactController {
 		Validate.notNull(contact, "Contato não informado.");
 		Validate.isTrue(Optional.ofNullable(contact.getName()).isPresent(), "Dados do contato estão inválidos.");
 		DAO.save(contact);
+	}
+
+	public List<Contact> findAll() {
+		return DAO.list();
 	}
 }
