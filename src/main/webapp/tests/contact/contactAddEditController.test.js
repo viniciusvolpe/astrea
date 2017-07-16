@@ -9,10 +9,14 @@
 
         beforeEach(angular.mock.module('avaliacandidatos'));
 
-        beforeEach(angular.mock.inject(function ($controller, $httpBackend, toastr){
+        beforeEach(angular.mock.inject(function ($controller, $httpBackend, toastr, $rootScope, $compile){
             contactAddEditController = $controller('contactAddEditController');
             mockBackend = $httpBackend;
             toastrMessages = toastr;
+            var scope = $rootScope.$new();
+            var ele = angular.element('<div id="myModal"></div>');
+            $compile(ele)(scope);
+            scope.$apply();
         }));
 
         it('Não deve salvar contatos sem nome.', function (){
@@ -28,6 +32,15 @@
             contactAddEditController.save();
             mockBackend.flush();
             expect(toastrMessages.success).toHaveBeenCalledWith('Seu contato foi salvos.', 'Sucesso!');
+        });
+
+        it('Deve exibir uma mensagem quando ocorrer erro ao salvar.', function (){
+            spyOn(toastrMessages, 'error');
+            mockBackend.expectPOST('/contacts').respond(500);
+            contactAddEditController.contact.name = "Vinicius";
+            contactAddEditController.save();
+            mockBackend.flush();
+            expect(toastrMessages.error).toHaveBeenCalledWith(undefined, 'Ops, algo errado aconteceu.');
         });
     });
 })();

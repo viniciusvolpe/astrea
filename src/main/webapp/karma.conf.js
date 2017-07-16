@@ -21,6 +21,8 @@ module.exports = function(config) {
       'https://ajax.googleapis.com/ajax/libs/angularjs/1.3.8/angular-route.min.js',
       'http://angular-ui.github.io/ui-router/release/angular-ui-router.js',
       'http://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.12.0/ui-bootstrap-tpls.min.js',
+      'https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js',
+      'https://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js',
       'libs/angular-toastr/dist/angular-toastr.min.js',
       'app/main.js',
       'controllers/*.js',

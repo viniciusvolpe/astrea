@@ -35,10 +35,15 @@
 			};
 
 			function _delete() {
-				if(vm.preDeletedContact != null) {
-
-					// Chamar o servlet /contacts com um método 'DELETE' para deletar um contato do banco de dados passando um parâmetro de identificação.
-				}
+				if(!vm.preDeletedContact) return;
+				contactService.delete(vm.preDeletedContact).then(function (){
+					toastr.success('Registro deletado com sucesso.', 'Sucesso!');
+					vm.preDeletedContact = undefined;
+					_listAllContacts();
+					$('#myModal').modal('hide');
+				}).catch(function (error){
+					toastr.error(error.message, 'Ops, algo errado aconteceu.');
+				});
 			};
 
 			function _bday(c) {
