@@ -88,4 +88,14 @@ public class ContactTest {
 		controller = new ContactController();
 		controller.delete(1L);
 	}
+	
+	@Test(expected = NullPointerException.class)
+	public void naoDeveConsultarUmContatoSeOIdForNulo(){
+		try {
+			controller.findOne(null);			
+		} catch(Exception e){
+			Assert.assertEquals("Código do contato não informado.", e.getMessage());
+			throw e;
+		}
+	}
 }

@@ -28,4 +28,9 @@ public class ContactController {
 		Validate.notNull(contact, "Contato não encontrado para o código informado.");
 		DAO.delete(contact);
 	}
+
+	public Contact findOne(Long contactId) {
+		Validate.notNull(contactId, "Código do contato não informado.");
+		return DAO.findOne(contactId);
+	}
 }

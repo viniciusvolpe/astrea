@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.google.appengine.repackaged.com.google.gson.Gson;
 
 import br.com.aurum.astrea.controller.ContactController;
@@ -26,6 +28,12 @@ public class ContactServlet extends HttpServlet {
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+		String id = req.getParameter("id");
+		if(StringUtils.isNotEmpty(id)){
+			Contact contact = CONTROLLER.findOne(Long.valueOf(id));
+			resp.getWriter().write(GSON.toJson(contact));
+			return;
+		}
 		List<Contact> contacts = CONTROLLER.findAll();
 		resp.getWriter().write(GSON.toJson(contacts));
 	}
