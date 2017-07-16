@@ -9,14 +9,10 @@
 
         beforeEach(angular.mock.module('avaliacandidatos'));
 
-        beforeEach(angular.mock.inject(function ($controller, $httpBackend, toastr, $rootScope, $compile){
+        beforeEach(angular.mock.inject(function ($controller, $httpBackend, toastr){
             contactAddEditController = $controller('contactAddEditController');
             mockBackend = $httpBackend;
             toastrMessages = toastr;
-            var scope = $rootScope.$new();
-            var ele = angular.element('<div id="myModal"></div>');
-            $compile(ele)(scope);
-            scope.$apply();
         }));
 
         it('Não deve salvar contatos sem nome.', function (){
@@ -28,6 +24,7 @@
         it('Deve salvar um contato se os dados estiverem corretamente preenchidos.', function(){
             spyOn(toastrMessages, 'success');
             mockBackend.expectPOST('/contacts').respond(200);
+            mockBackend.expectGET('/view/main.html').respond(200);
             contactAddEditController.contact.name = "Vinicius";
             contactAddEditController.save();
             mockBackend.flush();
@@ -37,6 +34,7 @@
         it('Deve exibir uma mensagem quando ocorrer erro ao salvar.', function (){
             spyOn(toastrMessages, 'error');
             mockBackend.expectPOST('/contacts').respond(500);
+            mockBackend.expectGET('/view/main.html').respond(200);
             contactAddEditController.contact.name = "Vinicius";
             contactAddEditController.save();
             mockBackend.flush();

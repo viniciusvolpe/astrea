@@ -5,9 +5,9 @@
 		.module('avaliacandidatos')
 		.controller('contactAddEditController', ContactAddEditController)
 
-		ContactAddEditController.$inject = ['ContactService', 'toastr'];
+		ContactAddEditController.$inject = ['ContactService', 'toastr', '$state'];
 
-		function ContactAddEditController(contactService, toastr){
+		function ContactAddEditController(contactService, toastr, $state){
 			var vm = this;
 
 			vm.contact = {};
@@ -21,6 +21,16 @@
 			vm.addMoreEmails = _addMoreEmails;
 			vm.deletePhone = _deletePhone;
 			vm.deleteEmail = _deleteEmail;
+
+			(function _init(){
+				console.log($state.params.id);
+				if(!$state.params.id) return;
+				contactService.getById($state.params.id).then(function (response){
+					vm.contact = response;
+				}).catch(function (error){
+					toastr.error(error.message, 'Ops, algo errado aconteceu.');
+				});
+			})();
 
 			function _save() {
 				vm.submitted = true;

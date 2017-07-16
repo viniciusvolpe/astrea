@@ -23,6 +23,7 @@
         it('Deve excluir o contato selecionado.', function (){
             spyOn(toastrMessages, 'success');
             mockBackend.expectDELETE('/contacts').respond(200);
+            mockBackend.expectGET('/view/main.html').respond(200);
             mockBackend.expectGET('/contacts').respond(200);
             contactListController.preDelete({});
             contactListController.delete();
@@ -33,6 +34,7 @@
         it('Deve exibir uma mensagem quando ocorrer erro ao excluir.', function (){
             spyOn(toastrMessages, 'error');
             mockBackend.expectDELETE('/contacts').respond(500);
+            mockBackend.expectGET('/view/main.html').respond(200);
             contactListController.preDelete({});
             contactListController.delete();
             mockBackend.flush();

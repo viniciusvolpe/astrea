@@ -4,9 +4,9 @@
 		.module('avaliacandidatos')
 		.controller("contactListController", ContactListController);
 
-		ContactListController.$inject = ['ContactService', 'toastr'];
+		ContactListController.$inject = ['ContactService', 'toastr', '$state'];
 
-		function ContactListController(contactService, toastr){
+		function ContactListController(contactService, toastr, $state){
 			var vm = this;
 			vm.contacts = [];
 			vm.preDeletedContact = {};
@@ -15,7 +15,7 @@
 			vm.listAllContacts = _listAllContacts;
 			vm.preDelete = _preDelete;
 			vm.delete = _delete;
-			vm.bday = _bday;
+			vm.edit = _edit;
 
 			function _init() {
 				vm.listAllContacts();
@@ -46,13 +46,9 @@
 				});
 			};
 
-			function _bday(c) {
-				if(c.birthDay==null || c.birthDay == ""){
-					return "";
-				} else {
-					return c.birthDay + "/" + c.birthMonth + "/" + c.birthYear;
-				}
-			};
+			function _edit(contact){
+				$state.go('main.addeditcontact', {id: contact.id});
+			}
 		}
 	
 })();
