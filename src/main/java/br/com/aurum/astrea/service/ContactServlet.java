@@ -17,6 +17,8 @@ import br.com.aurum.astrea.domain.Contact;
 @SuppressWarnings("serial")
 public class ContactServlet extends HttpServlet {
 	
+	private static final String FILTER_REQUEST_PARAM = "filter";
+	private static final String ID_REQUEST_PARAM = "id";
 	private static final ContactController CONTROLLER = new ContactController();
 	private static final Gson GSON = new Gson();
 
@@ -28,18 +30,24 @@ public class ContactServlet extends HttpServlet {
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-		String id = req.getParameter("id");
+		String id = req.getParameter(ID_REQUEST_PARAM);
 		if(StringUtils.isNotEmpty(id)){
 			Contact contact = CONTROLLER.findOne(Long.valueOf(id));
 			resp.getWriter().write(GSON.toJson(contact));
 			return;
 		}
-		List<Contact> contacts = CONTROLLER.findAll();
+		List<Contact> contacts;
+		String filter = req.getParameter(FILTER_REQUEST_PARAM);
+		if(StringUtils.isNotEmpty(filter)){
+			contacts = CONTROLLER.findByFilter(filter);
+		} else {
+			contacts = CONTROLLER.findAll();
+		}
 		resp.getWriter().write(GSON.toJson(contacts));
 	}
 	@Override
 	protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-		Long contactId = Long.valueOf(req.getParameter("id"));
+		Long contactId = Long.valueOf(req.getParameter(ID_REQUEST_PARAM));
 		CONTROLLER.delete(contactId);
 	}
 }

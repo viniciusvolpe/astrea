@@ -16,6 +16,8 @@
 			vm.preDelete = _preDelete;
 			vm.delete = _delete;
 			vm.edit = _edit;
+			vm.findByFilter = _findByFilter;
+			vm.clear = _clear;
 
 			function _init() {
 				vm.listAllContacts();
@@ -48,6 +50,19 @@
 
 			function _edit(contact){
 				$state.go('main.addeditcontact', {id: contact.id});
+			}
+
+			function _findByFilter(){
+				contactService.findByFilter(vm.filter).then(function (response){
+					vm.contacts = response;
+				}).catch(function (error){
+					toastr.error(error.message, 'Ops, algo errado aconteceu.');
+				});
+			}
+
+			function _clear(){
+				vm.filter = undefined;
+				_listAllContacts();
 			}
 		}
 	

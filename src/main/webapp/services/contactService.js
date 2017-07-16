@@ -15,6 +15,7 @@
         this.get = _get;
         this.delete = _delete;
         this.getById = _getById;
+        this.findByFilter = _findByFilter;
 
         function _save(contact){
             return ContactApi.save({}, contact).$promise;
@@ -30,6 +31,10 @@
 
         function _getById(id){
             return ContactApi.get({id: id}).$promise;
+        }
+
+        function _findByFilter(filter){
+            return ContactApi.query({filter: filter}).$promise; 
         }
     }
 })();

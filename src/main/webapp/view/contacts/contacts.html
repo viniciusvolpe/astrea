@@ -8,6 +8,15 @@
        		<button name="singlebutton" class="btn btn-primary" ui-sref="main.addeditcontact">Adicionar</button>
       </div>
     </div>
+    <div class="form-inline">
+      <input type="text" class="form-control" placeholder="Buscar por nome, email ou cpf" ng-model="listController.filter" size="80"/>
+      <button name="find" class="btn btn-default" ng-click="listController.findByFilter()">
+        <i class="fa fa-search"></i>
+      </button>
+      <button name="clear" class="btn btn-default" ng-click="listController.clear()">
+        <i class="fa fa-eraser"></i>
+      </button>
+    </div>
 
     <div class="table-responsive">
 

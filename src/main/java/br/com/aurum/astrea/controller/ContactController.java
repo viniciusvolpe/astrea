@@ -1,7 +1,11 @@
 package br.com.aurum.astrea.controller;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.Validate;
 
@@ -32,5 +36,19 @@ public class ContactController {
 	public Contact findOne(Long contactId) {
 		Validate.notNull(contactId, "Código do contato não informado.");
 		return DAO.findOne(contactId);
+	}
+
+	public List<Contact> findByFilter(String filter) {
+		List<Contact> contacts = DAO.list();
+		List<Contact> filteredByName = contacts.stream().filter(c -> c.getName().contains(filter)).collect(Collectors.toList());
+		List<Contact> filteredByCpf = contacts.stream().filter(c -> filter.equals(c.getCpf())).collect(Collectors.toList());
+		List<Contact> filteredByPhones = contacts.stream().filter(c -> c.getPhones().contains(filter)).collect(Collectors.toList());
+		
+		Set<Contact> result = new HashSet<>();
+		result.addAll(filteredByName);
+		result.addAll(filteredByCpf);
+		result.addAll(filteredByPhones);
+		
+		return new ArrayList<>(result);
 	}
 }
