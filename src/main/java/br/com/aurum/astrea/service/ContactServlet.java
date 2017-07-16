@@ -6,18 +6,20 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import br.com.aurum.astrea.dao.ContactDao;
+import com.google.appengine.repackaged.com.google.gson.Gson;
+
+import br.com.aurum.astrea.controller.ContactController;
+import br.com.aurum.astrea.domain.Contact;
 
 @SuppressWarnings("serial")
 public class ContactServlet extends HttpServlet {
 	
-	private static final ContactDao DAO = new ContactDao();
+	private static final ContactController CONTROLLER = new ContactController();
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-		
-		// TODO: Implementar um método que irá ler o corpo da requisição e, com essas informações,
-		// salvar no banco de dados uma entidade do tipo 'Contato' com essas informações.
+		Contact contact = new Gson().fromJson(req.getReader(), Contact.class);
+		CONTROLLER.save(contact);
 	}
 	
 	@Override

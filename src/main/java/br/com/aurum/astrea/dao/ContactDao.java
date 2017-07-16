@@ -14,7 +14,7 @@ public class ContactDao {
 	}
 	
 	public void save(Contact contact) {
-		// TODO: É preciso pesquisar como se usa o Objectify para armazenar a entidade contato no banco de dados.
+		ObjectifyService.ofy().save().entities(contact).now();
 	}
 	
 	public List<Contact> list() {
