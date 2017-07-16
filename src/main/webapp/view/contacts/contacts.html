@@ -25,10 +25,10 @@
         <tbody>
 
           <tr ng-repeat="c in listController.contacts">
-            <td>{{c.name}}</td>
-            <td>{{c.emails[0]}}</td>
-            <td>{{c.phones[0]}}</td>
-            <td>{{listController.bday(c)}}</td>
+            <td ng-bind="c.name"></td>
+            <td ng-bind="c.emails[0]"></td>
+            <td ng-bind="c.phones[0]"></td>
+            <td ng-bind="c | bday"></td>
             <td> <i class="fa fa-trash-o icon-box" ng-click="listController.preDelete(c)"></i> <td>    
           </tr>
 
