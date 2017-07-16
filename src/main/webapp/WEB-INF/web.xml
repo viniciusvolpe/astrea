@@ -12,7 +12,7 @@
 		<servlet-class>com.google.api.server.spi.SystemServiceServlet</servlet-class>
 		<init-param>
 			<param-name>services</param-name>
-			<param-value>br.com.aurum.astrea.service.ContactService</param-value>
+			<param-value>br.com.aurum.astrea.service.ContactServlet</param-value>
 		</init-param>
 	</servlet>
 

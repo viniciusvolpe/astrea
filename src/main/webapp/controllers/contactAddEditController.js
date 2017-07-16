@@ -1,50 +1,63 @@
-var contactAddEditController;
+(function (){
+	'use strict';
 
-contactAddEditController = function($scope, $http) {
-	$scope.contact = {};
-	$scope.contact.emails = [''];
-	$scope.contact.phones = [''];
-	$scope.submitted = false;
-	
-	$scope.save = function() {
+	angular
+		.module('avaliacandidatos')
+		.controller('contactAddEditController', ContactAddEditController)
 
-		$scope.submitted = true;
+		ContactAddEditController.$inject = ['ContactService', 'toastr'];
 
-		if ($scope.contact.name != null && $scope.contact.name != "") {
+		function ContactAddEditController(contactService, toastr){
+			var vm = this;
 
-			// Chamar o servlet /contacts com um método 'POST' para salvar um contato no banco de dados.
+			vm.contact = {};
+			vm.contact.emails = [''];
+			vm.contact.phones = [''];
+			vm.submitted = false;
+			
+			// Exposed
+			vm.save = _save;
+			vm.addMorePhones = _addMorePhones;
+			vm.addMoreEmails = _addMoreEmails;
+			vm.deletePhone = _deletePhone;
+			vm.deleteEmail = _deleteEmail;
+
+			function _save() {
+				vm.submitted = true;
+				if (!vm.contact.name) return toastr.warning('O campo nome deve ser preenchido.', 'Aviso!');
+				contactService.save(vm.contact).then(function (){
+					toastr.success('Seu contato foi salvos.', 'Sucesso!');
+				}).catch(function (error){
+					toastr.error(error.message, 'Ops, algo errado aconteceu.');
+				});
+			};
+
+			function _addMorePhones() {
+				vm.contact.phones.push('');
+			}; 
+
+			function _addMoreEmails() {
+				vm.contact.emails.push('');
+			};
+
+			function _deletePhone(index){
+				if (index > -1) {
+					vm.contact.phones.splice(index, 1);
+				}
+
+				if (vm.contact.phones.length < 1){
+					vm.addMorePhones();
+				}
+			};
+
+			function _deleteEmail(index){
+				if (index > -1) {
+					vm.contact.emails.splice(index, 1);
+				}
+
+				if (vm.contact.emails.length < 1){
+					vm.addMoreEmails();
+				}
+			};
 		}
-
-	};
-
-	$scope.addMorePhones = function() {
-		$scope.contact.phones.push('');
-	}; 
-
-	$scope.addMoreEmails = function() {
-		$scope.contact.emails.push('');
-	};
-
-	$scope.deletePhone = function(index){
-		if (index > -1) {
-    		$scope.contact.phones.splice(index, 1);
-		}
-
-		if ($scope.contact.phones.length < 1){
-			$scope.addMorePhones();
-		}
-	};
-
-	$scope.deleteEmail = function(index){
-		if (index > -1) {
-    		$scope.contact.emails.splice(index, 1);
-		}
-
-		if ($scope.contact.emails.length < 1){
-			$scope.addMoreEmails();
-		}
-	};
-
-};
-
-angular.module('avaliacandidatos').controller("contactAddEditController", contactAddEditController);
+})();

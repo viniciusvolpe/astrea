@@ -1,4 +1,4 @@
-var app = angular.module('avaliacandidatos', [ 'ngRoute', 'ui.router', 'ui.bootstrap']);
+var app = angular.module('avaliacandidatos', [ 'ngRoute', 'ui.router', 'ui.bootstrap', 'ngResource', 'toastr']);
 
 app.config([ '$urlRouterProvider', '$stateProvider',
 		function($urlRouterProvider, $stateProvider) {
