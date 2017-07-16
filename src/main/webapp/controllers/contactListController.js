@@ -1,37 +1,54 @@
-var contactListController;
+(function (){
+	'use strict';
+	angular
+		.module('avaliacandidatos')
+		.controller("contactListController", ContactListController);
 
-contactListController = function($scope, $http) {
-	$scope.contacts = [];
-	$scope.preDeletedContact = {};
+		ContactListController.$inject = ['ContactService', 'toastr'];
 
-	$scope.init = function() {
-		$scope.listAllContacts();
-	};
+		function ContactListController(contactService, toastr){
+			var vm = this;
+			vm.contacts = [];
+			vm.preDeletedContact = {};
+
+			vm.init = _init;
+			vm.listAllContacts = _listAllContacts;
+			vm.preDelete = _preDelete;
+			vm.delete = _delete;
+			vm.bday = _bday;
+
+			function _init() {
+				vm.listAllContacts();
+			};
+			
+			function _listAllContacts() {
+				contactService.get().then(function (response){
+					vm.contacts = response;
+				}).catch(function (error){
+					toastr.error(error.message, 'Ops, algo errado aconteceu.');
+				});
+			};
+
+			function _preDelete(contact) {
+				vm.preDeletedContact = contact;
+				$('#myModal').modal('show');
+			};
+
+			function _delete() {
+				if(vm.preDeletedContact != null) {
+
+					// Chamar o servlet /contacts com um método 'DELETE' para deletar um contato do banco de dados passando um parâmetro de identificação.
+				}
+			};
+
+			function _bday(c) {
+				if(c.birthDay==null || c.birthDay == ""){
+					return "";
+				} else {
+					return c.birthDay + "/" + c.birthMonth + "/" + c.birthYear;
+				}
+			};
+		}
 	
-	$scope.listAllContacts = function() {
+})();
 
-		// Chamar o servlet /contacts com um método 'GET' para listar os contatos do banco de dados.
-	};
-
-	$scope.preDelete = function(contact) {
-		$scope.preDeletedContact = contact;
-		$('#myModal').modal('show');
-	};
-
-	$scope.delete = function() {
-		if($scope.preDeletedContact != null) {
-
-			// Chamar o servlet /contacts com um método 'DELETE' para deletar um contato do banco de dados passando um parâmetro de identificação.
-		}
-	};
-
-	$scope.bday = function(c) {
-		if(c.birthDay==null || c.birthDay == ""){
-			return "";
-		} else {
-			return c.birthDay + "/" + c.birthMonth + "/" + c.birthYear;
-		}
-	};
-};
-
-angular.module('avaliacandidatos').controller("contactListController", contactListController);
