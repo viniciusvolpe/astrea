@@ -1,5 +1,6 @@
 package br.com.aurum.astrea.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.googlecode.objectify.annotation.Entity;
@@ -27,6 +28,11 @@ public class Contact {
 	private String address;
 
 	private String observation;
+	
+	public Contact(){
+		this.phones = new ArrayList<>();
+		this.emails = new ArrayList<>();
+	}
 
 	public String getName() {
 		return name;

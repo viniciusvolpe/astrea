@@ -14,32 +14,33 @@ import br.com.aurum.astrea.domain.Contact;
 
 public class ContactController {
 	
-	private static final ContactDao DAO = new ContactDao();
+	private ContactDao dao = new ContactDao();
 	
 	public void save(Contact contact) {
 		Validate.notNull(contact, "Contato não informado.");
 		Validate.isTrue(Optional.ofNullable(contact.getName()).isPresent(), "Dados do contato estão inválidos.");
-		DAO.save(contact);
+		dao.save(contact);
 	}
 
 	public List<Contact> findAll() {
-		return DAO.list();
+		return dao.list();
 	}
 
 	public void delete(Long contactId) {
 		Validate.notNull(contactId, "Código do contato não informado.");
-		Contact contact = DAO.findOne(contactId);
+		Contact contact = dao.findOne(contactId);
 		Validate.notNull(contact, "Contato não encontrado para o código informado.");
-		DAO.delete(contact);
+		dao.delete(contact);
 	}
 
 	public Contact findOne(Long contactId) {
 		Validate.notNull(contactId, "Código do contato não informado.");
-		return DAO.findOne(contactId);
+		return dao.findOne(contactId);
 	}
 
 	public List<Contact> findByFilter(String filter) {
-		List<Contact> contacts = DAO.list();
+		Validate.notNull(filter, "Filtro não informado.");
+		List<Contact> contacts = dao.list();
 		List<Contact> filteredByName = contacts.stream().filter(c -> c.getName().contains(filter)).collect(Collectors.toList());
 		List<Contact> filteredByCpf = contacts.stream().filter(c -> filter.equals(c.getCpf())).collect(Collectors.toList());
 		List<Contact> filteredByPhones = contacts.stream().filter(c -> c.getPhones().contains(filter)).collect(Collectors.toList());

@@ -15,7 +15,7 @@ import br.com.aurum.astrea.controller.ContactController;
 import br.com.aurum.astrea.domain.Contact;
 
 @SuppressWarnings("serial")
-public class ContactServlet extends HttpServlet {
+public class ContactServlet extends HttpServlet implements IServlet{
 	
 	private static final String FILTER_REQUEST_PARAM = "filter";
 	private static final String ID_REQUEST_PARAM = "id";
@@ -43,6 +43,7 @@ public class ContactServlet extends HttpServlet {
 		} else {
 			contacts = CONTROLLER.findAll();
 		}
+		configResponse(resp);
 		resp.getWriter().write(GSON.toJson(contacts));
 	}
 	@Override

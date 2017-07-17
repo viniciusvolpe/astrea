@@ -23,5 +23,15 @@
             var result = bday(null);
             expect(result).toBeUndefined();
         });
+
+        it('Deve retornar "Incompleto" quando um dos dados não foi informado.', function (){
+            var contact = {
+                birthDay: 1,
+                birthMonth: 1,
+                birthYear: null
+            }
+            var result = bday(contact);
+            expect(result).toEqual('Incompleto');
+        });
     });
 })();
